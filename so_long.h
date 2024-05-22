@@ -15,5 +15,6 @@
 
 # include "minilibx-linux/mlx.h"
 # include "printf/ft_printf.h"
+# include <fcntl.h>
 
 #endif // SO_LONG_H
