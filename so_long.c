@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "so_long.h"
+#define DESTROY_NOTIFY 17
 
 int	main(int argc, char **argv)
 {
@@ -20,6 +21,8 @@ int	main(int argc, char **argv)
 	window.mlx = mlx_init();
 	window.win = mlx_new_window(window.mlx, 1920, 1080, "so_long");
 	mlx_key_hook(window.win, handle_key, &window);
+	mlx_mouse_hook(window.win, handle_mouse, &window);
+	mlx_hook(window.win, DESTROY_NOTIFY, 0, &mlx_loop_end, window.mlx);
 	mlx_loop(window.mlx);
 	mlx_destroy_window(window.mlx, window.win);
 	mlx_destroy_display(window.mlx);

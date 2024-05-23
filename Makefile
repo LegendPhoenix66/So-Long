@@ -8,7 +8,7 @@ CFLAGS = -Wall -Wextra -Werror
 HEADER = so_long.h
 
 # Source files
-SRC = so_long.c check_args.c callback_handler.c
+SRC = so_long.c check_args.c hook_handler.c
 
 # Name of the executable
 NAME = so_long

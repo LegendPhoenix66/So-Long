@@ -27,5 +27,6 @@ typedef struct s_window
 
 void		check_args(int argc, char **argv);
 int			handle_key(int keycode, t_window *param);
+int			handle_mouse(int button, int x, int y, t_window *window);
 
 #endif // SO_LONG_H

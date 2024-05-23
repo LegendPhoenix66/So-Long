@@ -21,3 +21,12 @@ int	handle_key(int keycode, t_window *window)
 	}
 	return (0);
 }
+
+int	handle_mouse(int button, int x, int y, t_window *window)
+{
+	if (button == 1)
+	{
+		mlx_pixel_put(window->mlx, window->win, x, y, 0x00FF0000);
+	}
+	return (0);
+}
