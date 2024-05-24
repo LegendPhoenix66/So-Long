@@ -54,3 +54,4 @@ dkms.conf
 /printf/obj/
 /printf/libft/obj/
 /so_long
+/.idea/
