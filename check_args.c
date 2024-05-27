@@ -12,7 +12,7 @@
 
 #include "so_long.h"
 
-void	open_file(char *file)
+char	*open_file(char *file)
 {
 	int		fd;
 	char	*line;
@@ -35,9 +35,9 @@ void	open_file(char *file)
 		free(line);
 		line = new_line;
 	}
-	free(line);
 	free(temp);
 	close(fd);
+	return (line);
 }
 
 void	check_args(int argc, char **argv)
@@ -55,5 +55,4 @@ void	check_args(int argc, char **argv)
 		ft_printf("Error: File extension should be '.ber'\n");
 		exit(1);
 	}
-	open_file(argv[1]);
 }
