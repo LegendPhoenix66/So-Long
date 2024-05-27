@@ -17,6 +17,24 @@
 # include "printf/ft_printf.h"
 # include <fcntl.h>
 
+typedef struct  s_image
+{
+	void    *img;
+	void		*drawable_img;
+	int 	   bpp;
+	int 	   size_line;
+	int 	   endian;
+	int     width;
+	int     height;
+}               t_image;
+
+typedef struct  s_object
+{
+	t_image     image;
+	int         x;
+	int         y;
+}               t_object;
+
 typedef struct s_window
 {
 	void	*mlx;
@@ -24,6 +42,21 @@ typedef struct s_window
 	int		height;
 	int		width;
 }			t_window;
+
+typedef struct  s_game
+{
+    t_window    window;
+    t_object   coin; // one coin
+	t_object	*coins; // array of coins
+    int         num_coins; // number of coins
+    t_object    player;
+	t_object	exit;
+    t_image     background;
+	t_image     wall;
+    char        **map; // 2D array for the map
+    int         map_width;
+    int         map_height;
+}               t_game;
 
 void		check_args(int argc, char **argv);
 int			handle_key(int keycode, t_window *param);
