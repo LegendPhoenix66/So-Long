@@ -28,5 +28,9 @@ typedef struct s_window
 void		check_args(int argc, char **argv);
 int			handle_key(int keycode, t_window *param);
 int			handle_mouse(int button, int x, int y, t_window *window);
+t_image copy_image(void *mlx_ptr, t_image *image, int x, int y, int width, int height);
+t_image load_image(void *mlx_ptr, char *path, int width, int height);
+char	*open_file(char *file);
+void close_game(t_game *game);
 
 #endif // SO_LONG_H
