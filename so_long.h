@@ -47,15 +47,16 @@ typedef struct  s_game
 {
     t_window    window;
     t_object   coin; // one coin
-	t_object	*coins; // array of coins
+	t_list	*coins;
     int         num_coins; // number of coins
     t_object    player;
 	t_object	exit;
     t_image     background;
 	t_image     wall;
-    char        **map; // 2D array for the map
+    char        **map;
     int         map_width;
     int         map_height;
+	int	tile_size;
 }               t_game;
 
 void		check_args(int argc, char **argv);
@@ -65,5 +66,8 @@ t_image copy_image(void *mlx_ptr, t_image *image, int x, int y, int width, int h
 t_image load_image(void *mlx_ptr, char *path, int width, int height);
 char	*open_file(char *file);
 void close_game(t_game *game);
+
+// map_utils.c
+void calculate_map_size(t_game *game, const char *file);
 
 #endif // SO_LONG_H

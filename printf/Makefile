@@ -26,7 +26,7 @@ all: $(NAME)
 bonus: all
 
 $(NAME): $(OBJS)
-	make -C libft
+	make bonus -C libft
 	mkdir -p $(OBJDIR)
 	cd $(OBJDIR) && ar -x ../libft/libft.a
 	ar rcs $(NAME) $(OBJS) $(OBJDIR)/*.o
