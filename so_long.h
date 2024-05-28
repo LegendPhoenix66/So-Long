@@ -46,9 +46,9 @@ typedef struct s_window
 typedef struct s_game
 {
 	t_window	window;
-	t_object coin; // one coin
+	t_object	coin; // one coin
 	t_list		*coins;
-	int num_coins; // number of coins
+	int			num_coins; // number of coins
 	t_object	player;
 	t_object	exit;
 	t_image		background;

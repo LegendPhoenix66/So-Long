@@ -15,11 +15,13 @@
 
 void	init_map(t_game *game, char *file)
 {
-	int		i;
-	int		x = 0, y;
-	char	c;
-				t_object coin;
+	int			i;
+	int			x;
+	int 		y;
+	char		c;
+	t_object	coin;
 
+	game->coins = NULL;
 	calculate_map_size(game, file);
 	// Allocate memory for the 2D array
 	game->map = (char **)malloc(sizeof(char *) * game->map_height);
@@ -52,7 +54,6 @@ void	init_map(t_game *game, char *file)
 			}
 			else if (c == 'E')
 			{
-				ft_printf("Exit found at %d, %d\n", x, y);
 				game->exit.x = x;
 				game->exit.y = y;
 				game->map[y][x] = '0';
@@ -63,7 +64,7 @@ void	init_map(t_game *game, char *file)
 				coin.x = x;
 				coin.y = y;
 				coin.image = game->coin.image;
-				ft_lstadd_back(&game->coins, ft_lstnew(&coin));
+				ft_lstadd_front(&game->coins, ft_lstnew(&coin));
 				game->map[y][x] = '0';
 			}
 			x++;
@@ -92,10 +93,24 @@ void	draw_map(t_game *game)
 	mlx_put_image_to_window(game->window.mlx, game->window.win,
 		game->player.image.drawable_img, game->player.x * game->tile_size,
 		game->player.y * game->tile_size);
-	ft_printf("Exit: %d, %d\n", game->exit.x, game->exit.y);
-	// mlx_put_image_to_window(game->window.mlx, game->window.win,
-			game->exit.image.drawable_img,	game->exit.x * game->tile_size,
-			game->exit.y * game->tile_size);
+	mlx_put_image_to_window(game->window.mlx, game->window.win,
+		game->exit.image.drawable_img, game->exit.x * game->tile_size,
+		game->exit.y * game->tile_size);
+
+	t_list *tmp = game->coins;
+	tmp = tmp;
+	ft_printf("tmp: %p\n", tmp);
+	//ft_printf("tmp->content: %p\n", tmp->content);
+	//ft_printf("tmp->next: %p\n", tmp->next);
+	while (tmp)
+	{
+			t_object *coin = (t_object *)tmp->content;
+			coin = coin;
+		/*	mlx_put_image_to_window(game->window.mlx, game->window.win,
+			coin->image.drawable_img, coin->x * game->tile_size,
+			coin->y * game->tile_size);*/
+		tmp = tmp->next;
+	}
 }
 
 void	init(t_game *game, char *map_path)
