@@ -30,7 +30,7 @@ typedef struct s_image
 
 typedef struct s_object
 {
-	t_image		image;
+	t_image		*image;
 	int			x;
 	int			y;
 }				t_object;
@@ -46,13 +46,15 @@ typedef struct s_window
 typedef struct s_game
 {
 	t_window	window;
-	t_object	coin; // one coin
+	t_image     coin_img;
 	t_list		*coins;
 	int			num_coins; // number of coins
 	t_object	player;
 	t_object	exit;
 	t_image		background;
 	t_image		wall;
+    t_image     player_img;
+    t_image     exit_img;
 	char		**map;
 	int			map_width;
 	int			map_height;

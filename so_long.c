@@ -50,12 +50,14 @@ void	init_map(t_game *game, char *file)
 			{
 				game->player.x = x;
 				game->player.y = y;
+                game->player.image = &game->player_img;
 				game->map[y][x] = '0';
 			}
 			else if (c == 'E')
 			{
 				game->exit.x = x;
 				game->exit.y = y;
+                game->exit.image = &game->exit_img;
 				game->map[y][x] = '0';
 			}
 			else if (c == 'C')
@@ -63,7 +65,9 @@ void	init_map(t_game *game, char *file)
 				game->num_coins++;
 				coin.x = x;
 				coin.y = y;
-				coin.image = game->coin.image;
+				coin.image = &game->coin_img;
+//                ft_printf("\n%p\n", game->coin.image.drawable_img);
+//                ft_printf("\n%p\n", coin.image.drawable_img);
 				ft_lstadd_front(&game->coins, ft_lstnew(&coin));
 				game->map[y][x] = '0';
 			}
@@ -91,24 +95,24 @@ void	draw_map(t_game *game)
 		}
 	}
 	mlx_put_image_to_window(game->window.mlx, game->window.win,
-		game->player.image.drawable_img, game->player.x * game->tile_size,
+    game->player.image->drawable_img, game->player.x * game->tile_size,
 		game->player.y * game->tile_size);
 	mlx_put_image_to_window(game->window.mlx, game->window.win,
-		game->exit.image.drawable_img, game->exit.x * game->tile_size,
+		game->exit.image->drawable_img, game->exit.x * game->tile_size,
 		game->exit.y * game->tile_size);
 
 	t_list *tmp = game->coins;
-	tmp = tmp;
-	ft_printf("tmp: %p\n", tmp);
-	//ft_printf("tmp->content: %p\n", tmp->content);
-	//ft_printf("tmp->next: %p\n", tmp->next);
 	while (tmp)
 	{
-			t_object *coin = (t_object *)tmp->content;
-			coin = coin;
-		/*	mlx_put_image_to_window(game->window.mlx, game->window.win,
-			coin->image.drawable_img, coin->x * game->tile_size,
-			coin->y * game->tile_size);*/
+        t_object *coin = (t_object *)tmp->content;
+		coin = coin;
+//			mlx_put_image_to_window(game->window.mlx, game->window.win,
+//			coin->image->drawable_img, coin->x * game->tile_size,
+//			coin->y * game->tile_size);
+        ft_printf("game->coin_img: %p\n", game->coin_img);
+        ft_printf("coin->image: %p\n", coin->image);
+//        ft_printf("coin->x: %d\n", coin->x);
+//        ft_printf("coin->y: %d\n", coin->y);
 		tmp = tmp->next;
 	}
 }
@@ -118,19 +122,24 @@ void	init(t_game *game, char *map_path)
 	char	*file;
 
 	game->tile_size = 128;
-	file = open_file(map_path);
-	init_map(game, file);
-	free(file);
+
+    game->coin_img = load_image(game->window.mlx, "collectable.xpm",
+                                game->tile_size, game->tile_size);
 	game->background = load_image(game->window.mlx, "grass.xpm",
 			game->tile_size, game->tile_size);
 	game->wall = load_image(game->window.mlx, "wall.xpm", game->tile_size,
 			game->tile_size);
-	game->player.image = load_image(game->window.mlx, "player.xpm",
+	game->player_img = load_image(game->window.mlx, "player.xpm",
 			game->tile_size, game->tile_size);
-	game->exit.image = load_image(game->window.mlx, "exit.xpm", game->tile_size,
+	game->exit_img = load_image(game->window.mlx, "exit.xpm", game->tile_size,
 			game->tile_size);
-	game->coin.image = load_image(game->window.mlx, "collectable.xpm",
-			game->tile_size, game->tile_size);
+
+    ft_printf("game->coin_img: %p\n", game->coin_img);
+    ft_printf("game->player_img: %p\n", game->player_img);
+
+    file = open_file(map_path);
+    init_map(game, file);
+    free(file);
 	draw_map(game);
 }
 
