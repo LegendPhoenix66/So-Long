@@ -144,8 +144,8 @@ int	main(int argc, char **argv)
 	game.window.mlx = mlx_init();
 	game.window.win = mlx_new_window(game.window.mlx, 1920, 1080, "so_long");
 	init(&game, argv[1]);
-	mlx_key_hook(game.window.win, handle_key, &game);
-	mlx_mouse_hook(game.window.win, handle_mouse, &game);
+	mlx_key_hook(game.window.win, &handle_key, &game);
+	mlx_mouse_hook(game.window.win, &handle_mouse, &game);
 	mlx_hook(game.window.win, DESTROY_NOTIFY, 0, &mlx_loop_end,
 		game.window.mlx);
 	mlx_loop(game.window.mlx);
