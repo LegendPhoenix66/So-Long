@@ -25,6 +25,12 @@ void	close_game(t_game *game)
 	destroy_image(game, &game->player_img);
 	destroy_image(game, &game->exit_img);
 	destroy_image(game, &game->coin_img);
+	ft_lstclear(&game->coins, free);
+	for (int i = 0; i < game->map_height; i++)
+	{
+		free(game->map[i]);
+	}
+	free(game->map);
 	mlx_destroy_window(game->window.mlx, game->window.win);
 	mlx_destroy_display(game->window.mlx);
 	free(game->window.mlx);

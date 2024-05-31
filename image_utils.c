@@ -53,19 +53,19 @@ void	*resize_image(void *mlx_ptr, t_image *image, int new_width,
 	return (new_img);
 }
 
-t_image	load_image(void *mlx_ptr, char *path, int width, int height)
+t_image load_image(void *mlx_ptr, char *path, int size)
 {
-	t_image	image;
+    t_image image;
 
-	image.img = mlx_xpm_file_to_image(mlx_ptr, path, &image.width,
-			&image.height);
-	if (!image.img)
-	{
-		// Handle error
-		exit(1);
-	}
-	image.drawable_img = resize_image(mlx_ptr, &image, width, height);
-	return (image);
+	image.img = mlx_xpm_file_to_image(mlx_ptr, path, &image.width, &image.height);
+    if (!image.img)
+    {
+        // Handle error
+        exit(1);
+    }
+	image.drawable_img = resize_image(mlx_ptr, &image, size, size);
+
+    return image;
 }
 
 t_image	copy_image(void *mlx_ptr, t_image *image, int x, int y, int width,

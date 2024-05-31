@@ -66,11 +66,12 @@ int				handle_key(int keycode, t_window *param);
 int				handle_mouse(int button, int x, int y, t_window *window);
 t_image			copy_image(void *mlx_ptr, t_image *image, int x, int y,
 					int width, int height);
-t_image			load_image(void *mlx_ptr, char *path, int width, int height);
+t_image load_image(void *mlx_ptr, char *path, int size);
 char			*open_file(char *file);
 void			close_game(t_game *game);
 
 // map_utils.c
 void			calculate_map_size(t_game *game, const char *file);
+void fill_map(t_game *game, char *file);
 
 #endif // SO_LONG_H
