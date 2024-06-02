@@ -76,3 +76,145 @@ void fill_map(t_game *game, char *file)
 		}
 	}
 }
+
+void	draw_map(t_game *game)
+{
+	int x, y;
+	for (y = 0; y < game->map_height; y++)
+	{
+		for (x = 0; x < game->map_width; x++)
+		{
+			if (game->map[y][x] == '1')
+				mlx_put_image_to_window(game->window.mlx, game->window.win,
+										game->wall.drawable_img, x * game->tile_size, y
+																					  * game->tile_size);
+			else if (game->map[y][x] == '0')
+				mlx_put_image_to_window(game->window.mlx, game->window.win,
+										game->background.drawable_img, x * game->tile_size, y
+																							* game->tile_size);
+		}
+	}
+	mlx_put_image_to_window(game->window.mlx, game->window.win,
+							game->player.image->drawable_img, game->player.x * game->tile_size,
+							game->player.y * game->tile_size);
+	mlx_put_image_to_window(game->window.mlx, game->window.win,
+							game->exit.image->drawable_img, game->exit.x * game->tile_size,
+							game->exit.y * game->tile_size);
+
+	t_list *tmp = game->coins;
+	while (tmp) {
+		t_object *coin = (t_object *) tmp->content;
+		if (coin == NULL) {
+			ft_printf("coin is not initialized.\n");
+			return;
+		}
+		if (game->window.mlx == NULL) {
+			ft_printf("game->window.mlx is not initialized.\n");
+			return;
+		}
+		if (game->window.win == NULL) {
+			ft_printf("game->window.win is not initialized.\n");
+			return;
+		}
+		if (coin->image == NULL) {
+			ft_printf("coin->image is not initialized.\n");
+			return;
+		}
+		if (coin->image->drawable_img == NULL) {
+			ft_printf("coin->image->drawable_img is not initialized.\n");
+			return;
+		}
+		mlx_put_image_to_window(game->window.mlx, game->window.win,
+								coin->image->drawable_img, coin->x * game->tile_size,
+								coin->y * game->tile_size);
+		tmp = tmp->next;
+	}
+}
+
+char **copy_map(t_game *game) {
+    char **copy = (char **) malloc(sizeof(char *) * game->map_height);
+    for (int i = 0; i < game->map_height; i++) {
+        copy[i] = (char *) malloc(sizeof(char) * game->map_width);
+        for (int j = 0; j < game->map_width; j++) {
+            copy[i][j] = game->map[i][j];
+        }
+    }
+    return copy;
+}
+
+void free_map(char **map, t_game *game)
+{
+	for (int i = 0; i < game->map_height; i++) {
+		free(map[i]);
+	}
+	free(map);
+}
+
+int can_reach(t_game *game, int x1, int y1, int x2, int y2, char **map_copy)
+{
+	if (x1 < 0 || x1 >= game->map_width || y1 < 0 || y1 >= game->map_height) {
+		return 0;
+	}
+	if (map_copy[y1][x1] == '1') {
+		return 0;
+	}
+	if (x1 == x2 && y1 == y2)
+		return 1;
+	map_copy[y1][x1] = '1';
+	if (can_reach(game, x1 + 1, y1, x2, y2, map_copy))
+		return 1;
+	if (can_reach(game, x1 - 1, y1, x2, y2, map_copy))
+		return 1;
+	if (can_reach(game, x1, y1 + 1, x2, y2, map_copy))
+		return 1;
+	if (can_reach(game, x1, y1 - 1, x2, y2, map_copy))
+		return 1;
+	return 0;
+}
+
+void check_map(t_game *game)
+{
+	if (game->player.x == -1 || game->player.y == -1) {
+		ft_printf("Player not found in the map.\n");
+		exit(EXIT_FAILURE);
+	}
+	if (game->exit.x == -1 || game->exit.y == -1) {
+		ft_printf("Exit not found in the map.\n");
+		exit(EXIT_FAILURE);
+	}
+	if (game->num_coins == 0) {
+		ft_printf("No coins found in the map.\n");
+		exit(EXIT_FAILURE);
+	}
+	// Check if the map is surrounded by walls
+	for (int x = 0; x < game->map_width; x++) {
+		if (game->map[0][x] != '1' || game->map[game->map_height - 1][x] != '1') {
+			ft_printf("Map is not surrounded by walls.\n");
+			exit(EXIT_FAILURE);
+		}
+	}
+	// Check if the player can reach every coin and the exit
+	char **map_copy = copy_map(game);
+	if (!can_reach(game, game->player.x, game->player.y, game->exit.x, game->exit.y, map_copy)) {
+		ft_printf("Player cannot reach the exit.\n");
+		exit(EXIT_FAILURE);
+	}
+	free_map(map_copy, game);
+	t_list *tmp = game->coins;
+	while (tmp) {
+		t_object *coin = (t_object *) tmp->content;
+		if (coin == NULL) {
+			ft_printf("coin is not initialized.\n");
+			exit(EXIT_FAILURE);
+		}
+		map_copy = copy_map(game);
+		if (!can_reach(game, game->player.x, game->player.y, coin->x, coin->y, map_copy)) {
+			ft_printf("Player cannot reach a coin.\n");
+			ft_printf("coin at x: %d, y: %d\n", coin->x, coin->y);
+			exit(EXIT_FAILURE);
+		}
+		free_map(map_copy, game);
+		tmp = tmp->next;
+	}
+}
+

@@ -42,3 +42,19 @@ int	handle_mouse(int button, int x, int y, t_window *window)
 	}
 	return (0);
 }
+
+int resize_window(int keycode, t_game *game)
+{
+	ft_printf("Resize request\n");
+	if (keycode == RESIZE_REQUEST)
+	{
+		mlx_clear_window(game->window.mlx, game->window.win);
+		//mlx_destroy_window(game->window.mlx, game->window.win);
+		//game->window.width = 800;
+		//game->window.height = 600;
+		//game->window.win = mlx_new_window(game->window.mlx, game->window.width,
+		//	game->window.height, "so_long");
+		draw_map(game);
+	}
+	return (0);
+}

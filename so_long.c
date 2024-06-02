@@ -11,13 +11,31 @@
 /* ************************************************************************** */
 
 #include "so_long.h"
-#define DESTROY_NOTIFY 17
 
 void	init_map(t_game *game, char *file)
 {
 	int			i;
 
 	calculate_map_size(game, file);
+	// calculate tile_size based on window size and map size
+	int temp_width = game->window.width / game->map_width;
+	int temp_height = game->window.height / game->map_height;
+	if (temp_width < temp_height)
+		game->tile_size = temp_width;
+	else
+		game->tile_size = temp_height;
+	// resize images based on tile_size
+	mlx_destroy_image(game->window.mlx, game->coin_img.drawable_img);
+	game->coin_img.drawable_img = resize_image(game->window.mlx, &game->coin_img, game->tile_size, game->tile_size);
+	mlx_destroy_image(game->window.mlx, game->background.drawable_img);
+	game->background.drawable_img = resize_image(game->window.mlx, &game->background, game->tile_size, game->tile_size);
+	mlx_destroy_image(game->window.mlx, game->wall.drawable_img);
+	game->wall.drawable_img = resize_image(game->window.mlx, &game->wall, game->tile_size, game->tile_size);
+	mlx_destroy_image(game->window.mlx, game->player_img.drawable_img);
+	game->player_img.drawable_img = resize_image(game->window.mlx, &game->player_img, game->tile_size, game->tile_size);
+	mlx_destroy_image(game->window.mlx, game->exit_img.drawable_img);
+	game->exit_img.drawable_img = resize_image(game->window.mlx, &game->exit_img, game->tile_size, game->tile_size);
+
 	// Allocate memory for the 2D array
 	game->map = (char **) malloc(sizeof(char *) * game->map_height);
 	if (!game->map) {
@@ -33,83 +51,14 @@ void	init_map(t_game *game, char *file)
 		}
 	}
 	fill_map(game, file);
-}
-
-void	draw_map(t_game *game)
-{
-	int x, y;
-	for (y = 0; y < game->map_height; y++)
-	{
-		for (x = 0; x < game->map_width; x++)
-		{
-			if (game->map[y][x] == '1')
-				mlx_put_image_to_window(game->window.mlx, game->window.win,
-					game->wall.drawable_img, x * game->tile_size, y
-					* game->tile_size);
-			else if (game->map[y][x] == '0')
-				mlx_put_image_to_window(game->window.mlx, game->window.win,
-					game->background.drawable_img, x * game->tile_size, y
-					* game->tile_size);
-		}
-	}
-	mlx_put_image_to_window(game->window.mlx, game->window.win,
-    game->player.image->drawable_img, game->player.x * game->tile_size,
-		game->player.y * game->tile_size);
-	mlx_put_image_to_window(game->window.mlx, game->window.win,
-		game->exit.image->drawable_img, game->exit.x * game->tile_size,
-		game->exit.y * game->tile_size);
-
-	t_list *tmp = game->coins;
-	while (tmp) {
-		t_object *coin = (t_object *) tmp->content;
-		if (coin == NULL) {
-			ft_printf("coin is not initialized.\n");
-			return;
-		}
-		if (game->window.mlx == NULL) {
-			ft_printf("game->window.mlx is not initialized.\n");
-			return;
-		}
-		if (game->window.win == NULL) {
-			ft_printf("game->window.win is not initialized.\n");
-			return;
-		}
-		if (coin->image == NULL) {
-			ft_printf("coin->image is not initialized.\n");
-			return;
-		}
-		if (coin->image->drawable_img == NULL) {
-			ft_printf("coin->image->drawable_img is not initialized.\n");
-			return;
-		}
-		mlx_put_image_to_window(game->window.mlx, game->window.win,
-								coin->image->drawable_img, coin->x * game->tile_size,
-								coin->y * game->tile_size);
-		tmp = tmp->next;
-	}
-}
-
-void print_game(t_game game){
-	ft_printf("game->window: %p\n", &game.window);
-	ft_printf("game->coin_img: %p\n", &game.coin_img);
-	ft_printf("game->player_img: %p\n", &game.player_img);
-	ft_printf("game->exit_img: %p\n", &game.exit_img);
-	ft_printf("game->background: %p\n", &game.background);
-	ft_printf("game->wall: %p\n", &game.wall);
-	ft_printf("game->player: %p\n", &game.player);
-	ft_printf("game->exit: %p\n", &game.exit);
-	ft_printf("game->coins: %p\n", game.coins);
-	ft_printf("game->num_coins: %d\n", game.num_coins);
-	ft_printf("game->map: %p\n", game.map);
-	ft_printf("game->map_width: %d\n", game.map_width);
-	ft_printf("game->map_height: %d\n", game.map_height);
-	ft_printf("game->tile_size: %d\n", game.tile_size);
+	check_map(game);
 }
 
 void	init(t_game *game, char *map_path)
 {
 	char	*file;
 
+	// calculate tile_size based on window size
 	game->tile_size = 128;
 	game->num_coins = 0;
 	game->coins = NULL;
@@ -132,8 +81,6 @@ void	init(t_game *game, char *map_path)
     file = open_file(map_path);
     init_map(game, file);
     free(file);
-	draw_map(game);
-//	print_game(*game);
 }
 
 int	main(int argc, char **argv)
@@ -142,10 +89,15 @@ int	main(int argc, char **argv)
 
 	check_args(argc, argv);
 	game.window.mlx = mlx_init();
-	game.window.win = mlx_new_window(game.window.mlx, 1920, 1080, "so_long");
+	game.window.width = 1920;
+	game.window.height = 1080;
 	init(&game, argv[1]);
+	game.window.win = mlx_new_window(game.window.mlx, game.window.width,
+		game.window.height, "so_long");
+	draw_map(&game);
 	mlx_key_hook(game.window.win, &handle_key, &game);
 	mlx_mouse_hook(game.window.win, &handle_mouse, &game);
+	mlx_hook(game.window.win, RESIZE_REQUEST, 0, &resize_window, &game);
 	mlx_hook(game.window.win, DESTROY_NOTIFY, 0, &mlx_loop_end,
 		game.window.mlx);
 	mlx_loop(game.window.mlx);
