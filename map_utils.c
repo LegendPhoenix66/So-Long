@@ -12,9 +12,10 @@
 
 #include "so_long.h"
 
-void calculate_map_size(t_game *game, const char *file)
+void calculate_map_size(t_game *game, char *file)
 {
 	int i;
+    int temp_width = 0;
 
 	game->map_width = 0;
 	game->map_height = 1;
@@ -23,9 +24,16 @@ void calculate_map_size(t_game *game, const char *file)
 	while (file[i] != '\0') {
 		if (file[i] == '\n') {
 			game->map_height++;
-			game->map_width = 0;
+            if (game->map_width != 0 && temp_width != game->map_width) {
+                ft_printf("Map is not rectangular.\n");
+                free(file);
+                close_game(game);
+                exit(EXIT_FAILURE);
+            }
+            game->map_width = temp_width;
+			temp_width = 0;
 		} else
-			game->map_width++;
+			temp_width++;
 		i++;
 	}
 }
@@ -79,25 +87,23 @@ void fill_map(t_game *game, char *file)
 
 void	draw_map(t_game *game)
 {
+    if (game->tile_size != game->coin_img.width || game->tile_size != game->coin_img.height) {
+        update_drawable_image(game);
+    }
 	int x, y;
-	for (y = 0; y < game->map_height; y++)
-	{
-		for (x = 0; x < game->map_width; x++)
-		{
-			if (game->map[y][x] == '1')
-				mlx_put_image_to_window(game->window.mlx, game->window.win,
-										game->wall.drawable_img, x * game->tile_size, y
-																					  * game->tile_size);
-			else if (game->map[y][x] == '0')
-				mlx_put_image_to_window(game->window.mlx, game->window.win,
-										game->background.drawable_img, x * game->tile_size, y
-																							* game->tile_size);
-		}
-	}
+    for (y = 0; y < game->map_height; y++) {
+        for (x = 0; x < game->map_width; x++) {
+            if (game->map[y][x] == '1')
+                mlx_put_image_to_window(game->window.mlx, game->window.win, game->wall.drawable_img, x * game->tile_size, y * game->tile_size);
+            else if (game->map[y][x] == '0')
+                mlx_put_image_to_window(game->window.mlx, game->window.win, game->background.drawable_img, x * game->tile_size, y * game->tile_size);
+        }
+    }
 	mlx_put_image_to_window(game->window.mlx, game->window.win,
 							game->player.image->drawable_img, game->player.x * game->tile_size,
 							game->player.y * game->tile_size);
-	mlx_put_image_to_window(game->window.mlx, game->window.win,
+    if (game->num_coins == 0)
+	    mlx_put_image_to_window(game->window.mlx, game->window.win,
 							game->exit.image->drawable_img, game->exit.x * game->tile_size,
 							game->exit.y * game->tile_size);
 

@@ -18,7 +18,6 @@
 #define MOVE_LEFT 2
 #define MOVE_RIGHT 3
 #define DESTROY_NOTIFY 17
-#define RESIZE_REQUEST 25
 
 # include "minilibx-linux/mlx.h"
 # include "printf/ft_printf.h"
@@ -66,6 +65,7 @@ typedef struct s_game
 	int			map_width;
 	int			map_height;
 	int			tile_size;
+    int         steps;
 }				t_game;
 
 void			check_args(int argc, char **argv);
@@ -76,13 +76,14 @@ t_image			copy_image(void *mlx_ptr, t_image *image, int x, int y,
 					int width, int height);
 t_image load_image(void *mlx_ptr, char *path, int size);
 void	*resize_image(void *mlx_ptr, t_image *image, int new_width, int new_height);
+void update_drawable_image(t_game *game);
 char			*open_file(char *file);
 void			close_game(t_game *game);
 
 void	move_player(t_game *game, int direction);
 
 // map_utils.c
-void			calculate_map_size(t_game *game, const char *file);
+void			calculate_map_size(t_game *game, char *file);
 void fill_map(t_game *game, char *file);
 void	draw_map(t_game *game);
 void check_map(t_game *game);

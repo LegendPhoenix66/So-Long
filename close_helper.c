@@ -14,8 +14,10 @@
 
 void	destroy_image(t_game *game, t_image *image)
 {
-	mlx_destroy_image(game->window.mlx, image->img);
-	mlx_destroy_image(game->window.mlx, image->drawable_img);
+    if (image->img)
+	    mlx_destroy_image(game->window.mlx, image->img);
+    if (image->drawable_img)
+	    mlx_destroy_image(game->window.mlx, image->drawable_img);
 }
 
 void	close_game(t_game *game)
@@ -28,10 +30,14 @@ void	close_game(t_game *game)
 	ft_lstclear(&game->coins, free);
 	for (int i = 0; i < game->map_height; i++)
 	{
-		free(game->map[i]);
+        if (game->map[i])
+		    free(game->map[i]);
 	}
-	free(game->map);
-	mlx_destroy_window(game->window.mlx, game->window.win);
-	mlx_destroy_display(game->window.mlx);
+    if  (game->map)
+	    free(game->map);
+    if (game->window.win)
+	    mlx_destroy_window(game->window.mlx, game->window.win);
+    if  (game->window.mlx)
+	    mlx_destroy_display(game->window.mlx);
 	free(game->window.mlx);
 }

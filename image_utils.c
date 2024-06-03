@@ -98,3 +98,17 @@ t_image	copy_image(void *mlx_ptr, t_image *image, int x, int y, int width,
 	}
 	return (new_image);
 }
+
+void update_drawable_image(t_game *game)
+{
+    mlx_destroy_image(game->window.mlx, game->coin_img.drawable_img);
+    game->coin_img.drawable_img = resize_image(game->window.mlx, &game->coin_img, game->tile_size, game->tile_size);
+    mlx_destroy_image(game->window.mlx, game->background.drawable_img);
+    game->background.drawable_img = resize_image(game->window.mlx, &game->background, game->tile_size, game->tile_size);
+    mlx_destroy_image(game->window.mlx, game->wall.drawable_img);
+    game->wall.drawable_img = resize_image(game->window.mlx, &game->wall, game->tile_size, game->tile_size);
+    mlx_destroy_image(game->window.mlx, game->player_img.drawable_img);
+    game->player_img.drawable_img = resize_image(game->window.mlx, &game->player_img, game->tile_size, game->tile_size);
+    mlx_destroy_image(game->window.mlx, game->exit_img.drawable_img);
+    game->exit_img.drawable_img = resize_image(game->window.mlx, &game->exit_img, game->tile_size, game->tile_size);
+}

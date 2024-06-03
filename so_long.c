@@ -25,16 +25,7 @@ void	init_map(t_game *game, char *file)
 	else
 		game->tile_size = temp_height;
 	// resize images based on tile_size
-	mlx_destroy_image(game->window.mlx, game->coin_img.drawable_img);
-	game->coin_img.drawable_img = resize_image(game->window.mlx, &game->coin_img, game->tile_size, game->tile_size);
-	mlx_destroy_image(game->window.mlx, game->background.drawable_img);
-	game->background.drawable_img = resize_image(game->window.mlx, &game->background, game->tile_size, game->tile_size);
-	mlx_destroy_image(game->window.mlx, game->wall.drawable_img);
-	game->wall.drawable_img = resize_image(game->window.mlx, &game->wall, game->tile_size, game->tile_size);
-	mlx_destroy_image(game->window.mlx, game->player_img.drawable_img);
-	game->player_img.drawable_img = resize_image(game->window.mlx, &game->player_img, game->tile_size, game->tile_size);
-	mlx_destroy_image(game->window.mlx, game->exit_img.drawable_img);
-	game->exit_img.drawable_img = resize_image(game->window.mlx, &game->exit_img, game->tile_size, game->tile_size);
+    update_drawable_image(game);
 
 	// Allocate memory for the 2D array
 	game->map = (char **) malloc(sizeof(char *) * game->map_height);
@@ -58,13 +49,13 @@ void	init(t_game *game, char *map_path)
 {
 	char	*file;
 
-	// calculate tile_size based on window size
-	game->tile_size = 128;
+	game->tile_size = 32;
 	game->num_coins = 0;
 	game->coins = NULL;
 	game->map = NULL;
 	game->map_height = 0;
 	game->map_width = 0;
+    game->steps = 0;
 
 	game->coin_img = load_image(game->window.mlx, "collectable.xpm", game->tile_size);
 	game->background = load_image(game->window.mlx, "grass.xpm", game->tile_size);
@@ -89,15 +80,17 @@ int	main(int argc, char **argv)
 
 	check_args(argc, argv);
 	game.window.mlx = mlx_init();
+
 	game.window.width = 1920;
 	game.window.height = 1080;
-	init(&game, argv[1]);
+    init(&game, argv[1]);
+    game.window.width = game.map_width * game.tile_size;
+    game.window.height = game.map_height * game.tile_size;
 	game.window.win = mlx_new_window(game.window.mlx, game.window.width,
 		game.window.height, "so_long");
 	draw_map(&game);
 	mlx_key_hook(game.window.win, &handle_key, &game);
 	mlx_mouse_hook(game.window.win, &handle_mouse, &game);
-	mlx_hook(game.window.win, RESIZE_REQUEST, 0, &resize_window, &game);
 	mlx_hook(game.window.win, DESTROY_NOTIFY, 0, &mlx_loop_end,
 		game.window.mlx);
 	mlx_loop(game.window.mlx);
