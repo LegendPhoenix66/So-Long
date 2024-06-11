@@ -57,11 +57,11 @@ void	init(t_game *game, char *map_path)
 	game->map_width = 0;
     game->steps = 0;
 
-	game->coin_img = load_image(game->window.mlx, "collectable.xpm", game->tile_size);
-	game->background = load_image(game->window.mlx, "grass.xpm", game->tile_size);
-	game->wall = load_image(game->window.mlx, "wall.xpm", game->tile_size);
-	game->player_img = load_image(game->window.mlx, "player.xpm", game->tile_size);
-	game->exit_img = load_image(game->window.mlx, "exit.xpm", game->tile_size);
+	game->coin_img = load_image(game->window.mlx, "resources/collectable.xpm", game->tile_size);
+	game->background = load_image(game->window.mlx, "resources/grass.xpm", game->tile_size);
+	game->wall = load_image(game->window.mlx, "resources/wall.xpm", game->tile_size);
+	game->player_img = load_image(game->window.mlx, "resources/player.xpm", game->tile_size);
+	game->exit_img = load_image(game->window.mlx, "resources/exit.xpm", game->tile_size);
 
 	if (!game->coin_img.img || !game->background.img || !game->wall.img || !game->player_img.img || !game->exit_img.img)
 	{
