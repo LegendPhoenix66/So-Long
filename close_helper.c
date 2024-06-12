@@ -39,6 +39,9 @@ void	close_game(t_game *game)
 		}
 		free(game->map);
 	}
+    if (game->file) {
+        free(game->file);
+    }
 	if (game->window.win)
 		mlx_destroy_window(game->window.mlx, game->window.win);
 	if (game->window.mlx)

@@ -25,20 +25,21 @@ void	check_tile(t_game *game, int x, int y)
 		coin = (t_object *)tmp->content;
 		if (coin->x == x && coin->y == y)
 		{
+            t_list *next_temp = tmp->next;
 			// remove coin from list
 			if (tmp == game->coins)
 			{
-				game->coins = tmp->next;
-				ft_lstdelone(tmp, free);
+				game->coins = next_temp;
 			}
 			else
 			{
 				prev = game->coins;
 				while (prev->next != tmp)
 					prev = prev->next;
-				prev->next = tmp->next;
-				ft_lstdelone(tmp, free);
+				prev->next = next_temp;
 			}
+            ft_lstdelone(tmp, free);
+            tmp = next_temp;
 			game->num_coins--;
 			// if no coins left, draw exit
 			if (game->num_coins == 0)
@@ -48,7 +49,9 @@ void	check_tile(t_game *game, int x, int y)
 					game->exit.y * game->tile_size);
 			}
 		}
-		tmp = tmp->next;
+        else {
+            tmp = tmp->next;
+        }
 	}
 	// check for exit
 	if (game->player.x == game->exit.x && game->player.y == game->exit.y

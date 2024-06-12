@@ -79,7 +79,6 @@ void	init(t_game *game, char *map_path)
 	}
 	game->file = open_file(map_path);
 	init_map(game);
-	free(game->file);
 }
 
 int	main(int argc, char **argv)

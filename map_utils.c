@@ -6,7 +6,7 @@
 /*   By: lhopp <lhopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 11:56:02 by lhopp             #+#    #+#             */
-/*   Updated: 2024/06/12 16:38:28 by lhopp            ###   ########.fr       */
+/*   Updated: 2024/06/12 17:36:26 by lhopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -247,28 +247,38 @@ void	check_map(t_game *game)
 
 	if (game->player.x == -1 || game->player.y == -1)
 	{
-		ft_printf("Player not found in the map.\n");
+		ft_printf("Error\nPlayer not found in the map.\n");
 		close_game(game);
 		exit(EXIT_FAILURE);
 	}
 	if (game->exit.x == -1 || game->exit.y == -1)
 	{
-		ft_printf("Exit not found in the map.\n");
+		ft_printf("Error\nExit not found in the map.\n");
 		close_game(game);
 		exit(EXIT_FAILURE);
 	}
 	if (game->num_coins == 0)
 	{
-		ft_printf("No coins found in the map.\n");
+		ft_printf("Error\nNo coins found in the map.\n");
 		close_game(game);
 		exit(EXIT_FAILURE);
 	}
-	// Check if the map is surrounded by walls
+	// Check top and bottom rows
 	for (int x = 0; x < game->map_width; x++)
 	{
 		if (game->map[0][x] != '1' || game->map[game->map_height - 1][x] != '1')
 		{
-			ft_printf("Map is not surrounded by walls.\n");
+			ft_printf("Error\nMap is not surrounded by walls.\n");
+			close_game(game);
+			exit(EXIT_FAILURE);
+		}
+	}
+	// Check left and right columns
+	for (int y = 0; y < game->map_height; y++)
+	{
+		if (game->map[y][0] != '1' || game->map[y][game->map_width - 1] != '1')
+		{
+			ft_printf("Error\nMap is not surrounded by walls.\n");
 			close_game(game);
 			exit(EXIT_FAILURE);
 		}
@@ -278,7 +288,7 @@ void	check_map(t_game *game)
 	if (!can_reach(game, game->player.x, game->player.y, game->exit.x,
 			game->exit.y, map_copy))
 	{
-		ft_printf("Player cannot reach the exit.\n");
+		ft_printf("Error\nPlayer cannot reach the exit.\n");
 		close_game(game);
 		exit(EXIT_FAILURE);
 	}
@@ -297,7 +307,7 @@ void	check_map(t_game *game)
 		if (!can_reach(game, game->player.x, game->player.y, coin->x, coin->y,
 				map_copy))
 		{
-			ft_printf("Player cannot reach a coin.\n");
+			ft_printf("Error\nPlayer cannot reach a coin.\n");
 			close_game(game);
 			exit(EXIT_FAILURE);
 		}

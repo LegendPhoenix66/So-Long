@@ -24,7 +24,7 @@ char	*open_file(char *file)
 	fd = open(file, O_RDONLY);
 	if (fd == -1)
 	{
-		ft_printf("Error opening file\n");
+		ft_printf("Error\nCould not open file\n");
 		exit(1);
 	}
 	line = ft_strdup("");
@@ -46,13 +46,13 @@ void	check_args(int argc, char **argv)
 
 	if (argc != 2)
 	{
-		ft_printf("Error: Expected 1 arguments, received %d\n", argc - 1);
+		ft_printf("Error\nExpected 1 arguments, received %d\n", argc - 1);
 		exit(1);
 	}
 	len = ft_strlen(argv[1]);
 	if (len < 4 || ft_strncmp(argv[1] + len - 4, ".ber", 4))
 	{
-		ft_printf("Error: File extension should be '.ber'\n");
+		ft_printf("Error\nFile extension should be '.ber'\n");
 		exit(1);
 	}
 }
