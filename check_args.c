@@ -46,7 +46,7 @@ void	check_args(int argc, char **argv)
 
 	if (argc != 2)
 	{
-		ft_printf("Error: Expected 2 arguments, received %d\n", argc);
+		ft_printf("Error: Expected 1 arguments, received %d\n", argc - 1);
 		exit(1);
 	}
 	len = ft_strlen(argv[1]);
