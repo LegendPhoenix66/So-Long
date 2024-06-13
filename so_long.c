@@ -82,6 +82,51 @@ void	init(t_game *game, char *map_path)
 	init_map(game);
 }
 
+#include <time.h>
+
+int animate(t_game *game)
+{
+    static struct timespec last_time_portal, last_time_patrol;
+    static int initialized = 0;
+    struct timespec current_time;
+    long long elapsed_portal, elapsed_patrol;
+    static int i = 0, j = 0;
+
+    // Get the current time
+    clock_gettime(CLOCK_MONOTONIC, &current_time);
+
+    if (!initialized) {
+        // This is the first frame, so there's no previous frame time to compare with
+        last_time_portal = current_time;
+		last_time_patrol = current_time;
+        initialized = 1;
+    } else {
+        // Calculate elapsed time in milliseconds
+        elapsed_portal = (current_time.tv_sec - last_time_portal.tv_sec) * 1000 + (current_time.tv_nsec - last_time_portal.tv_nsec) / 1000000;
+		elapsed_patrol = (current_time.tv_sec - last_time_patrol.tv_sec) * 1000 + (current_time.tv_nsec - last_time_patrol.tv_nsec) / 1000000;
+
+        if (elapsed_portal >= 150) {
+            // More than 150 ms have passed since the last frame, so render the next frame
+            ft_printf("i: %d\n", i);
+            i++;
+
+            // Update the time of the last frame
+            last_time_portal = current_time;
+        }
+
+        if (elapsed_patrol >= 500) {
+            // More than 500 ms have passed since the last frame, so render the next frame
+            ft_printf("j: %d\n", j);
+            j++;
+
+            // Update the time of the last frame
+            last_time_patrol = current_time;
+        }
+    }
+	game = game;
+    return (0);
+}
+
 int	main(int argc, char **argv)
 {
 	t_game	game;
@@ -98,6 +143,7 @@ int	main(int argc, char **argv)
 			game.window.height, "so_long");
 	draw_map(&game);
 	mlx_key_hook(game.window.win, &handle_key, &game);
+	mlx_loop_hook(game.window.mlx, &animate, &game);
 	mlx_hook(game.window.win, DESTROY_NOTIFY, 0, &mlx_loop_end,
 		game.window.mlx);
 	mlx_loop(game.window.mlx);
