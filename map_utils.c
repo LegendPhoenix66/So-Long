@@ -6,7 +6,7 @@
 /*   By: lhopp <lhopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 11:56:02 by lhopp             #+#    #+#             */
-/*   Updated: 2024/06/12 17:36:26 by lhopp            ###   ########.fr       */
+/*   Updated: 2024/06/13 15:46:46 by lhopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ void	calculate_map_size(t_game *game)
 			game->map_width = temp_width;
 			temp_width = 0;
 		}
-		else {
+		else
+		{
 			temp_width++;
 		}
 		i++;
@@ -119,10 +120,12 @@ void	fill_map(t_game *game)
 {
 	int	x;
 	int	y;
+	int	i;
 
 	x = 0;
 	y = 0;
-	for (int i = 0; game->file[i] != '\0'; i++)
+	i = 0;
+	while (game->file[i] != '\0')
 	{
 		if (game->file[i] == '\n')
 		{
@@ -134,6 +137,7 @@ void	fill_map(t_game *game)
 			handle_character(game, game->file[i], x, y);
 			x++;
 		}
+		i++;
 	}
 }
 
@@ -141,16 +145,19 @@ void	draw_map(t_game *game)
 {
 	t_list		*tmp;
 	t_object	*coin;
+	int			y;
+	int			x;
 
 	if (game->tile_size != game->coin_img.width
 		|| game->tile_size != game->coin_img.height)
 	{
 		update_drawable_image(game);
 	}
-	int x, y;
-	for (y = 0; y < game->map_height; y++)
+	y = 0;
+	while (y < game->map_height)
 	{
-		for (x = 0; x < game->map_width; x++)
+		x = 0;
+		while (x < game->map_width)
 		{
 			if (game->map[y][x] == '1')
 				mlx_put_image_to_window(game->window.mlx, game->window.win,
@@ -160,7 +167,9 @@ void	draw_map(t_game *game)
 				mlx_put_image_to_window(game->window.mlx, game->window.win,
 					game->background.drawable_img, x * game->tile_size, y
 					* game->tile_size);
+			x++;
 		}
+		y++;
 	}
 	mlx_put_image_to_window(game->window.mlx, game->window.win,
 		game->player.image->drawable_img, game->player.x * game->tile_size,
@@ -208,24 +217,34 @@ void	draw_map(t_game *game)
 char	**copy_map(t_game *game)
 {
 	char	**copy;
+	int		i;
+	int		j;
 
 	copy = (char **)malloc(sizeof(char *) * game->map_height);
-	for (int i = 0; i < game->map_height; i++)
+	i = 0;
+	while (i < game->map_height)
 	{
 		copy[i] = (char *)malloc(sizeof(char) * game->map_width);
-		for (int j = 0; j < game->map_width; j++)
+		j = 0;
+		while (j < game->map_width)
 		{
 			copy[i][j] = game->map[i][j];
+			j++;
 		}
+		i++;
 	}
 	return (copy);
 }
 
 void	free_map(char **map, t_game *game)
 {
-	for (int i = 0; i < game->map_height; i++)
+	int	i;
+
+	i = 0;
+	while (i < game->map_height)
 	{
 		free(map[i]);
+		i++;
 	}
 	free(map);
 }
@@ -259,6 +278,8 @@ void	check_map(t_game *game)
 	char		**map_copy;
 	t_list		*tmp;
 	t_object	*coin;
+	int			x;
+	int			y;
 
 	if (game->player.x == -1 || game->player.y == -1)
 	{
@@ -279,7 +300,8 @@ void	check_map(t_game *game)
 		exit(EXIT_FAILURE);
 	}
 	// Check top and bottom rows
-	for (int x = 0; x < game->map_width; x++)
+	x = 0;
+	while (x < game->map_width)
 	{
 		if (game->map[0][x] != '1' || game->map[game->map_height - 1][x] != '1')
 		{
@@ -287,9 +309,11 @@ void	check_map(t_game *game)
 			close_game(game);
 			exit(EXIT_FAILURE);
 		}
+		x++;
 	}
 	// Check left and right columns
-	for (int y = 0; y < game->map_height; y++)
+	y = 0;
+	while (y < game->map_height)
 	{
 		if (game->map[y][0] != '1' || game->map[y][game->map_width - 1] != '1')
 		{
@@ -297,6 +321,7 @@ void	check_map(t_game *game)
 			close_game(game);
 			exit(EXIT_FAILURE);
 		}
+		y++;
 	}
 	// Check if the player can reach every coin and the exit
 	map_copy = copy_map(game);

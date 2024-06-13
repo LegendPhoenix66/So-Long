@@ -6,7 +6,7 @@
 /*   By: lhopp <lhopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 16:36:38 by lhopp             #+#    #+#             */
-/*   Updated: 2024/06/12 16:38:28 by lhopp            ###   ########.fr       */
+/*   Updated: 2024/06/13 14:09:06 by lhopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ void	check_tile(t_game *game, int x, int y)
 	t_list		*tmp;
 	t_object	*coin;
 	t_list		*prev;
+	t_list		*next_temp;
 
 	// check for coin
 	tmp = game->coins;
@@ -25,7 +26,7 @@ void	check_tile(t_game *game, int x, int y)
 		coin = (t_object *)tmp->content;
 		if (coin->x == x && coin->y == y)
 		{
-            t_list *next_temp = tmp->next;
+			next_temp = tmp->next;
 			// remove coin from list
 			if (tmp == game->coins)
 			{
@@ -38,8 +39,8 @@ void	check_tile(t_game *game, int x, int y)
 					prev = prev->next;
 				prev->next = next_temp;
 			}
-            ft_lstdelone(tmp, free);
-            tmp = next_temp;
+			ft_lstdelone(tmp, free);
+			tmp = next_temp;
 			game->num_coins--;
 			// if no coins left, draw exit
 			if (game->num_coins == 0)
@@ -49,9 +50,10 @@ void	check_tile(t_game *game, int x, int y)
 					game->exit.y * game->tile_size);
 			}
 		}
-        else {
-            tmp = tmp->next;
-        }
+		else
+		{
+			tmp = tmp->next;
+		}
 	}
 	// check for exit
 	if (game->player.x == game->exit.x && game->player.y == game->exit.y

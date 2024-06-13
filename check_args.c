@@ -6,7 +6,7 @@
 /*   By: lhopp <lhopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 11:07:18 by lhopp             #+#    #+#             */
-/*   Updated: 2024/05/23 12:20:46 by lhopp            ###   ########.fr       */
+/*   Updated: 2024/06/13 14:09:42 by lhopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,15 +44,14 @@ char	*open_file(t_game *game, char *file)
 void	check_args(int argc, char **argv)
 {
 	size_t	len;
+	char	*file_name;
 
 	if (argc != 2)
 	{
 		ft_printf("Error\nExpected 1 arguments, received %d\n", argc - 1);
 		exit(1);
 	}
-	// argv[1] can contain the path to the file, I only want the file name
-	char *file_name = ft_strrchr(argv[1], '/');
-	// remove the starting '/' from the file name
+	file_name = ft_strrchr(argv[1], '/');
 	if (file_name)
 		file_name++;
 	else
@@ -62,7 +61,8 @@ void	check_args(int argc, char **argv)
 	{
 		ft_printf("Error\nFile extension should be '.ber'\n");
 		exit(1);
-	} else if (len == 4)
+	}
+	else if (len == 4)
 	{
 		ft_printf("Error\nFile name should not be empty\n");
 		exit(1);

@@ -61,7 +61,6 @@ t_image	load_image(void *mlx_ptr, char *path, int size)
 			&image.height);
 	if (!image.img)
 	{
-		// Handle error
 		exit(1);
 	}
 	image.drawable_img = resize_image(mlx_ptr, &image, size, size);
