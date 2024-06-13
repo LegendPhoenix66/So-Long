@@ -77,7 +77,7 @@ t_image			load_image(void *mlx_ptr, char *path, int size);
 void			*resize_image(void *mlx_ptr, t_image *image, int new_width,
 					int new_height);
 void			update_drawable_image(t_game *game);
-char			*open_file(char *file);
+char			*open_file(t_game *game, char *file);
 void			close_game(t_game *game);
 
 void			move_player(t_game *game, int direction);

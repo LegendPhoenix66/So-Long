@@ -12,7 +12,7 @@
 
 #include "so_long.h"
 
-char	*open_file(char *file)
+char	*open_file(t_game *game, char *file)
 {
 	int		fd;
 	char	*line;
@@ -25,6 +25,7 @@ char	*open_file(char *file)
 	if (fd == -1)
 	{
 		ft_printf("Error\nCould not open file\n");
+		close_game(game);
 		exit(1);
 	}
 	line = ft_strdup("");
@@ -49,10 +50,21 @@ void	check_args(int argc, char **argv)
 		ft_printf("Error\nExpected 1 arguments, received %d\n", argc - 1);
 		exit(1);
 	}
-	len = ft_strlen(argv[1]);
-	if (len < 4 || ft_strncmp(argv[1] + len - 4, ".ber", 4))
+	// argv[1] can contain the path to the file, I only want the file name
+	char *file_name = ft_strrchr(argv[1], '/');
+	// remove the starting '/' from the file name
+	if (file_name)
+		file_name++;
+	else
+		file_name = argv[1];
+	len = ft_strlen(file_name);
+	if (len < 4 || ft_strncmp(file_name + len - 4, ".ber", 4))
 	{
 		ft_printf("Error\nFile extension should be '.ber'\n");
+		exit(1);
+	} else if (len == 4)
+	{
+		ft_printf("Error\nFile name should not be empty\n");
 		exit(1);
 	}
 }

@@ -61,6 +61,7 @@ void	init(t_game *game, char *map_path)
 	game->player.y = -1;
 	game->exit.x = -1;
 	game->exit.y = -1;
+	game->file = NULL;
 	game->coin_img = load_image(game->window.mlx, "resources/collectable.xpm",
 			game->tile_size);
 	game->background = load_image(game->window.mlx, "resources/grass.xpm",
@@ -77,7 +78,7 @@ void	init(t_game *game, char *map_path)
 		ft_printf("Failed to load images\n");
 		exit(EXIT_FAILURE);
 	}
-	game->file = open_file(map_path);
+	game->file = open_file(game, map_path);
 	init_map(game);
 }
 

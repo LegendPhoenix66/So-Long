@@ -44,7 +44,8 @@ void	close_game(t_game *game)
     }
 	if (game->window.win)
 		mlx_destroy_window(game->window.mlx, game->window.win);
-	if (game->window.mlx)
+	if (game->window.mlx) {
 		mlx_destroy_display(game->window.mlx);
-	free(game->window.mlx);
+		free(game->window.mlx);
+	}
 }

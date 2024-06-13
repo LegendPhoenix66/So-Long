@@ -21,7 +21,6 @@ void	calculate_map_size(t_game *game)
 	game->map_width = 0;
 	game->map_height = 1;
 	i = 0;
-	// First, count the width and height of the map
 	while (game->file[i] != '\0')
 	{
 		if (game->file[i] == '\n')
@@ -29,17 +28,29 @@ void	calculate_map_size(t_game *game)
 			game->map_height++;
 			if (game->map_width != 0 && temp_width != game->map_width)
 			{
-				ft_printf("Map is not rectangular.\n");
-				free(game->file);
+				ft_printf("Error\nMap is not rectangular.\n");
 				close_game(game);
 				exit(EXIT_FAILURE);
 			}
 			game->map_width = temp_width;
 			temp_width = 0;
 		}
-		else
+		else {
 			temp_width++;
+		}
 		i++;
+	}
+	if (temp_width != game->map_width)
+	{
+		ft_printf("Error\nMap is not rectangular.\n");
+		close_game(game);
+		exit(EXIT_FAILURE);
+	}
+	if (game->map_height == 1 || game->map_width == 0)
+	{
+		ft_printf("Error\nMap is empty.\n");
+		close_game(game);
+		exit(EXIT_FAILURE);
 	}
 }
 
@@ -47,6 +58,12 @@ void	handle_character(t_game *game, char c, int x, int y)
 {
 	t_object	*coin;
 
+	if (c != '0' && c != '1' && c != 'P' && c != 'E' && c != 'C')
+	{
+		ft_printf("Error\nInvalid character in the map.\n");
+		close_game(game);
+		exit(EXIT_FAILURE);
+	}
 	if (x >= 0 && x < game->map_width && y >= 0 && y < game->map_height)
 	{
 		if (c == '1')
@@ -62,9 +79,8 @@ void	handle_character(t_game *game, char c, int x, int y)
 	{
 		if (game->player.x != -1 || game->player.y != -1)
 		{
-			ft_printf("Multiple players found in the map.\n");
+			ft_printf("Error\nMultiple players found in the map.\n");
 			close_game(game);
-			free(game->file);
 			exit(EXIT_FAILURE);
 		}
 		game->player.x = x;
@@ -75,9 +91,8 @@ void	handle_character(t_game *game, char c, int x, int y)
 	{
 		if (game->exit.x != -1 || game->exit.y != -1)
 		{
-			ft_printf("Multiple exits found in the map.\n");
+			ft_printf("Error\nMultiple exits found in the map.\n");
 			close_game(game);
-			free(game->file);
 			exit(EXIT_FAILURE);
 		}
 		game->exit.x = x;
