@@ -64,6 +64,17 @@ void	check_tile(t_game *game, int x, int y)
 	}
 }
 
+void update_seps(t_game *game)
+{
+	char *steps = ft_itoa(game->steps);
+	char *temp = ft_strjoin("Steps: ", steps);
+	mlx_put_image_to_window(game->window.mlx, game->window.win,
+							game->wall.drawable_img, 0, 0);
+	mlx_string_put(game->window.mlx, game->window.win, 50, 50, 0x00FFFFFF, temp);
+	free(temp);
+	free(steps);
+}
+
 void	move_player(t_game *game, int direction)
 {
 	int	new_x;
@@ -90,6 +101,6 @@ void	move_player(t_game *game, int direction)
 	game->player.x = new_x;
 	game->player.y = new_y;
 	game->steps++;
-	ft_printf("Steps: %d\n", game->steps);
+	update_seps(game);
 	check_tile(game, new_x, new_y);
 }
