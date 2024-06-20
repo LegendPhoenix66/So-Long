@@ -111,6 +111,8 @@ int	animate(t_game *game)
 			// More than 150 ms have passed since the last frame,
 			//	so render the next frame
 			ft_printf("i: %d\n", i);
+//			mlx_put_image_to_window(game->window.mlx, game->window.win, game->portal_images->content, 0, 0);
+//			game->portal_images = game->portal_images->next;
 			i++;
 			// Update the time of the last frame
 			last_time_portal = current_time;
@@ -118,6 +120,32 @@ int	animate(t_game *game)
 	}
 	game = game;
 	return (0);
+}
+
+void init_portal_images(t_game *game){
+	game->portal_images = NULL;
+	void *image = mlx_xpm_file_to_image(game->window.mlx, "resources/collectable.xpm",
+										&game->tile_size, &game->tile_size);
+	ft_lstadd_front(&game->portal_images, ft_lstnew(image));
+
+	image = mlx_xpm_file_to_image(game->window.mlx, "resources/grass.xpm",
+								  &game->tile_size, &game->tile_size);
+	ft_lstadd_front(&game->portal_images, ft_lstnew(image));
+
+	image = mlx_xpm_file_to_image(game->window.mlx, "resources/wall.xpm",
+								  &game->tile_size, &game->tile_size);
+	ft_lstadd_front(&game->portal_images, ft_lstnew(image));
+
+	image = mlx_xpm_file_to_image(game->window.mlx, "resources/player.xpm",
+								  &game->tile_size, &game->tile_size);
+	ft_lstadd_front(&game->portal_images, ft_lstnew(image));
+
+	image = mlx_xpm_file_to_image(game->window.mlx, "resources/exit.xpm",
+								  &game->tile_size, &game->tile_size);
+	ft_lstadd_front(&game->portal_images, ft_lstnew(image));
+
+	// link the last element to the first element
+	ft_lstlast(game->portal_images)->next = game->portal_images;
 }
 
 int	main(int argc, char **argv)
@@ -135,6 +163,16 @@ int	main(int argc, char **argv)
 	game.window.win = mlx_new_window(game.window.mlx, game.window.width,
 			game.window.height, "so_long");
 	draw_map(&game);
+
+//	init_portal_images(&game);
+//
+//	mlx_put_image_to_window(game.window.mlx, game.window.win, game.portal_images->content, 0, 0);
+//	mlx_put_image_to_window(game.window.mlx, game.window.win, game.portal_images->next->content, 32, 0);
+//	mlx_put_image_to_window(game.window.mlx, game.window.win, game.portal_images->next->next->content, 64, 0);
+//	mlx_put_image_to_window(game.window.mlx, game.window.win, game.portal_images->next->next->next->content, 96, 0);
+//	mlx_put_image_to_window(game.window.mlx, game.window.win, game.portal_images->next->next->next->next->content, 128, 0);
+//	mlx_put_image_to_window(game.window.mlx, game.window.win, game.portal_images->next->next->next->next->next->content, 160, 0);
+
 	mlx_key_hook(game.window.win, &handle_key, &game);
 	mlx_loop_hook(game.window.mlx, &animate, &game);
 	mlx_hook(game.window.win, DESTROY_NOTIFY, 0, &mlx_loop_end,

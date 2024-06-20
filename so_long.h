@@ -67,6 +67,7 @@ typedef struct s_game
 	int			tile_size;
 	int			steps;
 	char		*file;
+	t_list		*portal_images;
 }				t_game;
 
 void			check_args(int argc, char **argv);
