@@ -124,23 +124,27 @@ int	animate(t_game *game)
 
 void init_portal_images(t_game *game){
 	game->portal_images = NULL;
-	void *image = mlx_xpm_file_to_image(game->window.mlx, "resources/collectable.xpm",
+	void *image = mlx_xpm_file_to_image(game->window.mlx, "resources/portal-blue-0.xpm",
 										&game->tile_size, &game->tile_size);
 	ft_lstadd_front(&game->portal_images, ft_lstnew(image));
 
-	image = mlx_xpm_file_to_image(game->window.mlx, "resources/grass.xpm",
+	image = mlx_xpm_file_to_image(game->window.mlx, "resources/portal-blue-1.xpm",
 								  &game->tile_size, &game->tile_size);
 	ft_lstadd_front(&game->portal_images, ft_lstnew(image));
 
-	image = mlx_xpm_file_to_image(game->window.mlx, "resources/wall.xpm",
+	image = mlx_xpm_file_to_image(game->window.mlx, "resources/portal-blue-2.xpm",
 								  &game->tile_size, &game->tile_size);
 	ft_lstadd_front(&game->portal_images, ft_lstnew(image));
 
-	image = mlx_xpm_file_to_image(game->window.mlx, "resources/player.xpm",
+	image = mlx_xpm_file_to_image(game->window.mlx, "resources/portal-blue-3.xpm",
 								  &game->tile_size, &game->tile_size);
 	ft_lstadd_front(&game->portal_images, ft_lstnew(image));
 
-	image = mlx_xpm_file_to_image(game->window.mlx, "resources/exit.xpm",
+	image = mlx_xpm_file_to_image(game->window.mlx, "resources/portal-blue-4.xpm",
+								  &game->tile_size, &game->tile_size);
+	ft_lstadd_front(&game->portal_images, ft_lstnew(image));
+
+	image = mlx_xpm_file_to_image(game->window.mlx, "resources/portal-blue-5.xpm",
 								  &game->tile_size, &game->tile_size);
 	ft_lstadd_front(&game->portal_images, ft_lstnew(image));
 
