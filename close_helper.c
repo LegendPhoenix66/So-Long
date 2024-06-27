@@ -6,7 +6,7 @@
 /*   By: lhopp <lhopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 11:55:30 by lhopp             #+#    #+#             */
-/*   Updated: 2024/06/13 14:11:58 by lhopp            ###   ########.fr       */
+/*   Updated: 2024/06/27 15:49:07 by lhopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void	destroy_image(t_game *game, t_image *image)
 void	close_map(t_game *game)
 {
 	int	i;
+
 	if (game->map != NULL)
 	{
 		i = 0;
@@ -38,6 +39,25 @@ void	close_map(t_game *game)
 	}
 }
 
+void	destroy_portal_images(t_game *game)
+{
+	t_list	*tmp;
+
+	tmp = game->portal_images;
+	while (tmp->next != game->portal_images)
+	{
+		tmp = tmp->next;
+	}
+	tmp->next = NULL;
+	tmp = game->portal_images;
+	while (tmp)
+	{
+		destroy_image(game, (t_image *)tmp->content);
+		tmp = tmp->next;
+	}
+	ft_lstclear(&game->portal_images, free);
+}
+
 void	close_game(t_game *game)
 {
 	destroy_image(game, &game->background);
@@ -45,6 +65,7 @@ void	close_game(t_game *game)
 	destroy_image(game, &game->player_img);
 	destroy_image(game, &game->exit_img);
 	destroy_image(game, &game->coin_img);
+	destroy_portal_images(game);
 	ft_lstclear(&game->coins, free);
 	close_map(game);
 	if (game->file)

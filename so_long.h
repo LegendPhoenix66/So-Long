@@ -6,7 +6,7 @@
 /*   By: lhopp <lhopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 14:03:09 by lhopp             #+#    #+#             */
-/*   Updated: 2024/06/27 11:09:52 by lhopp            ###   ########.fr       */
+/*   Updated: 2024/06/27 15:13:19 by lhopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,10 +73,8 @@ typedef struct s_game
 
 void			check_args(int argc, char **argv);
 int				handle_key(int keycode, t_game *param);
-t_image			copy_image(void *mlx_ptr, t_image *image, int x, int y,
-					int width, int height);
 t_image			load_image(void *mlx_ptr, char *path, int size);
-void			*resize_image(void *mlx_ptr, t_image *image, int new_width,
+void			set_drawable_image(void *mlx_ptr, t_image *image, int new_width,
 					int new_height);
 void			update_drawable_image(t_game *game);
 void			update_portal_images(t_game *game);

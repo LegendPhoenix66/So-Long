@@ -6,7 +6,7 @@
 /*   By: lhopp <lhopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 14:02:40 by lhopp             #+#    #+#             */
-/*   Updated: 2024/06/27 11:09:49 by lhopp            ###   ########.fr       */
+/*   Updated: 2024/06/27 12:51:38 by lhopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,24 +19,22 @@ void	init_map(t_game *game)
 	int	temp_height;
 
 	calculate_map_size(game);
-	// calculate tile_size based on window size and map size
 	temp_width = game->window.width / game->map_width;
 	temp_height = game->window.height / game->map_height;
 	if (temp_width < temp_height)
 		game->tile_size = temp_width;
 	else
 		game->tile_size = temp_height;
-	// resize images based on tile_size
 	update_drawable_image(game);
 	update_portal_images(game);
-	// Allocate memory for the 2D array
 	game->map = (char **)malloc(sizeof(char *) * game->map_height);
 	if (!game->map)
 	{
 		ft_printf("Failed to allocate memory for game->map\n");
 		exit(EXIT_FAILURE);
 	}
-	for (i = 0; i < game->map_height; i++)
+	i = 0;
+	while (i < game->map_height)
 	{
 		game->map[i] = (char *)malloc(sizeof(char) * game->map_width);
 		if (!game->map[i])
@@ -44,6 +42,7 @@ void	init_map(t_game *game)
 			ft_printf("Failed to allocate memory for game->map[%d]\n", i);
 			exit(EXIT_FAILURE);
 		}
+		i++;
 	}
 	fill_map(game);
 	check_map(game);
