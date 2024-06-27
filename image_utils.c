@@ -6,7 +6,7 @@
 /*   By: lhopp <lhopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 11:55:50 by lhopp             #+#    #+#             */
-/*   Updated: 2024/06/12 16:38:28 by lhopp            ###   ########.fr       */
+/*   Updated: 2024/06/27 11:09:44 by lhopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,4 +115,31 @@ void	update_drawable_image(t_game *game)
 	mlx_destroy_image(game->window.mlx, game->exit_img.drawable_img);
 	game->exit_img.drawable_img = resize_image(game->window.mlx,
 			&game->exit_img, game->tile_size, game->tile_size);
+}
+
+void	update_portal_images(t_game *game)
+{
+	t_list	*tmp;
+	int		i;
+	t_list	*first;
+
+	tmp = game->portal_images;
+	i = 0;
+	if (tmp != NULL)
+	{
+		first = tmp;
+		while (tmp->next != first)
+		{
+			mlx_destroy_image(game->window.mlx,
+				((t_image *)tmp->content)->drawable_img);
+			((t_image *)tmp->content)->drawable_img = resize_image(game->window.mlx,
+					(t_image *)tmp->content, game->tile_size, game->tile_size);
+			tmp = tmp->next;
+			i++;
+		}
+		mlx_destroy_image(game->window.mlx,
+			((t_image *)tmp->content)->drawable_img);
+		((t_image *)tmp->content)->drawable_img = resize_image(game->window.mlx,
+				(t_image *)tmp->content, game->tile_size, game->tile_size);
+	}
 }

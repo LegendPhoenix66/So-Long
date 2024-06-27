@@ -6,7 +6,7 @@
 /*   By: lhopp <lhopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 14:03:09 by lhopp             #+#    #+#             */
-/*   Updated: 2024/06/12 16:38:28 by lhopp            ###   ########.fr       */
+/*   Updated: 2024/06/27 11:09:52 by lhopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include "minilibx-linux/mlx.h"
 # include "printf/ft_printf.h"
 # include <fcntl.h>
+# include <time.h>
 
 typedef struct s_image
 {
@@ -78,6 +79,7 @@ t_image			load_image(void *mlx_ptr, char *path, int size);
 void			*resize_image(void *mlx_ptr, t_image *image, int new_width,
 					int new_height);
 void			update_drawable_image(t_game *game);
+void			update_portal_images(t_game *game);
 char			*open_file(t_game *game, char *file);
 void			close_game(t_game *game);
 

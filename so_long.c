@@ -6,7 +6,7 @@
 /*   By: lhopp <lhopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 14:02:40 by lhopp             #+#    #+#             */
-/*   Updated: 2024/06/14 14:41:36 by lhopp            ###   ########.fr       */
+/*   Updated: 2024/06/27 11:09:49 by lhopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ void	init_map(t_game *game)
 		game->tile_size = temp_height;
 	// resize images based on tile_size
 	update_drawable_image(game);
+	update_portal_images(game);
 	// Allocate memory for the 2D array
 	game->map = (char **)malloc(sizeof(char *) * game->map_height);
 	if (!game->map)
@@ -46,6 +47,38 @@ void	init_map(t_game *game)
 	}
 	fill_map(game);
 	check_map(game);
+}
+
+void	init_portal_images(t_game *game)
+{
+	t_image	*image;
+
+	game->portal_images = NULL;
+	image = malloc(sizeof(t_image));
+	*image = load_image(game->window.mlx, "resources/portal-blue-0.xpm",
+			game->tile_size);
+	ft_lstadd_front(&game->portal_images, ft_lstnew(image));
+	image = malloc(sizeof(t_image));
+	*image = load_image(game->window.mlx, "resources/portal-blue-1.xpm",
+			game->tile_size);
+	ft_lstadd_front(&game->portal_images, ft_lstnew(image));
+	image = malloc(sizeof(t_image));
+	*image = load_image(game->window.mlx, "resources/portal-blue-2.xpm",
+			game->tile_size);
+	ft_lstadd_front(&game->portal_images, ft_lstnew(image));
+	image = malloc(sizeof(t_image));
+	*image = load_image(game->window.mlx, "resources/portal-blue-3.xpm",
+			game->tile_size);
+	ft_lstadd_front(&game->portal_images, ft_lstnew(image));
+	image = malloc(sizeof(t_image));
+	*image = load_image(game->window.mlx, "resources/portal-blue-4.xpm",
+			game->tile_size);
+	ft_lstadd_front(&game->portal_images, ft_lstnew(image));
+	image = malloc(sizeof(t_image));
+	*image = load_image(game->window.mlx, "resources/portal-blue-5.xpm",
+			game->tile_size);
+	ft_lstadd_front(&game->portal_images, ft_lstnew(image));
+	ft_lstlast(game->portal_images)->next = game->portal_images;
 }
 
 void	init(t_game *game, char *map_path)
@@ -78,11 +111,10 @@ void	init(t_game *game, char *map_path)
 		ft_printf("Failed to load images\n");
 		exit(EXIT_FAILURE);
 	}
+	init_portal_images(game);
 	game->file = open_file(game, map_path);
 	init_map(game);
 }
-
-#include <time.h>
 
 int	animate(t_game *game)
 {
@@ -91,65 +123,33 @@ int	animate(t_game *game)
 	static int				i = 0;
 	static struct timespec	last_time_portal;
 	long long				elapsed_portal;
+	t_image					*image;
 
-	// Get the current time
 	clock_gettime(CLOCK_MONOTONIC, &current_time);
 	if (!initialized)
 	{
-		// This is the first frame,
-		//	so there's no previous frame time to compare with
 		last_time_portal = current_time;
 		initialized = 1;
 	}
 	else
 	{
-		// Calculate elapsed time in milliseconds
 		elapsed_portal = (current_time.tv_sec - last_time_portal.tv_sec) * 1000
 			+ (current_time.tv_nsec - last_time_portal.tv_nsec) / 1000000;
 		if (elapsed_portal >= 150)
 		{
-			// More than 150 ms have passed since the last frame,
-			//	so render the next frame
-			ft_printf("i: %d\n", i);
-//			mlx_put_image_to_window(game->window.mlx, game->window.win, game->portal_images->content, 0, 0);
-//			game->portal_images = game->portal_images->next;
-			i++;
-			// Update the time of the last frame
+			if (game->num_coins == 0)
+			{
+				image = game->portal_images->content;
+				mlx_put_image_to_window(game->window.mlx, game->window.win,
+					image->drawable_img, game->exit.x * game->tile_size,
+					game->exit.y * game->tile_size);
+				game->portal_images = game->portal_images->next;
+				i++;
+			}
 			last_time_portal = current_time;
 		}
 	}
-	game = game;
 	return (0);
-}
-
-void init_portal_images(t_game *game){
-	game->portal_images = NULL;
-	void *image = mlx_xpm_file_to_image(game->window.mlx, "resources/portal-blue-0.xpm",
-										&game->tile_size, &game->tile_size);
-	ft_lstadd_front(&game->portal_images, ft_lstnew(image));
-
-	image = mlx_xpm_file_to_image(game->window.mlx, "resources/portal-blue-1.xpm",
-								  &game->tile_size, &game->tile_size);
-	ft_lstadd_front(&game->portal_images, ft_lstnew(image));
-
-	image = mlx_xpm_file_to_image(game->window.mlx, "resources/portal-blue-2.xpm",
-								  &game->tile_size, &game->tile_size);
-	ft_lstadd_front(&game->portal_images, ft_lstnew(image));
-
-	image = mlx_xpm_file_to_image(game->window.mlx, "resources/portal-blue-3.xpm",
-								  &game->tile_size, &game->tile_size);
-	ft_lstadd_front(&game->portal_images, ft_lstnew(image));
-
-	image = mlx_xpm_file_to_image(game->window.mlx, "resources/portal-blue-4.xpm",
-								  &game->tile_size, &game->tile_size);
-	ft_lstadd_front(&game->portal_images, ft_lstnew(image));
-
-	image = mlx_xpm_file_to_image(game->window.mlx, "resources/portal-blue-5.xpm",
-								  &game->tile_size, &game->tile_size);
-	ft_lstadd_front(&game->portal_images, ft_lstnew(image));
-
-	// link the last element to the first element
-	ft_lstlast(game->portal_images)->next = game->portal_images;
 }
 
 int	main(int argc, char **argv)
@@ -167,16 +167,6 @@ int	main(int argc, char **argv)
 	game.window.win = mlx_new_window(game.window.mlx, game.window.width,
 			game.window.height, "so_long");
 	draw_map(&game);
-
-//	init_portal_images(&game);
-//
-//	mlx_put_image_to_window(game.window.mlx, game.window.win, game.portal_images->content, 0, 0);
-//	mlx_put_image_to_window(game.window.mlx, game.window.win, game.portal_images->next->content, 32, 0);
-//	mlx_put_image_to_window(game.window.mlx, game.window.win, game.portal_images->next->next->content, 64, 0);
-//	mlx_put_image_to_window(game.window.mlx, game.window.win, game.portal_images->next->next->next->content, 96, 0);
-//	mlx_put_image_to_window(game.window.mlx, game.window.win, game.portal_images->next->next->next->next->content, 128, 0);
-//	mlx_put_image_to_window(game.window.mlx, game.window.win, game.portal_images->next->next->next->next->next->content, 160, 0);
-
 	mlx_key_hook(game.window.win, &handle_key, &game);
 	mlx_loop_hook(game.window.mlx, &animate, &game);
 	mlx_hook(game.window.win, DESTROY_NOTIFY, 0, &mlx_loop_end,
