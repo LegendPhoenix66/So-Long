@@ -80,6 +80,12 @@ void	update_drawable_image(t_game *game)
 	mlx_destroy_image(game->window.mlx, game->exit_img.drawable_img);
 	set_drawable_image(game->window.mlx, &game->exit_img, game->tile_size,
 		game->tile_size);
+	mlx_destroy_image(game->window.mlx, game->spikes_on.drawable_img);
+	set_drawable_image(game->window.mlx, &game->spikes_on, game->tile_size,
+		game->tile_size);
+	mlx_destroy_image(game->window.mlx, game->spikes_off.drawable_img);
+	set_drawable_image(game->window.mlx, &game->spikes_off, game->tile_size,
+		game->tile_size);
 }
 
 void	update_portal_images(t_game *game)

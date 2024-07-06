@@ -58,8 +58,9 @@ void	calculate_map_size(t_game *game)
 void	handle_character(t_game *game, char c, int x, int y)
 {
 	t_object	*coin;
+	t_spikes 	*spikes;
 
-	if (c != '0' && c != '1' && c != 'P' && c != 'E' && c != 'C')
+	if (c != '0' && c != '1' && c != 'P' && c != 'E' && c != 'C' && c != 'X')
 	{
 		ft_printf("Error\nInvalid character in the map.\n");
 		close_game(game);
@@ -113,6 +114,20 @@ void	handle_character(t_game *game, char c, int x, int y)
 		coin->y = y;
 		coin->image = &game->coin_img;
 		ft_lstadd_front(&game->coins, ft_lstnew(coin));
+	} else if (c == 'X')
+	{
+		spikes = malloc(sizeof(t_spikes));
+		if (spikes == NULL)
+		{
+			ft_printf("Failed to allocate memory for spikes.\n");
+			exit(EXIT_FAILURE);
+		}
+		spikes->x = x;
+		spikes->y = y;
+		spikes->state = 0;
+		spikes->image_on = &game->spikes_on;
+		spikes->image_off = &game->spikes_off;
+		ft_lstadd_front(&game->spikes, ft_lstnew(spikes));
 	}
 }
 
@@ -187,16 +202,6 @@ void	draw_map(t_game *game)
 			ft_printf("coin is not initialized.\n");
 			return ;
 		}
-		if (game->window.mlx == NULL)
-		{
-			ft_printf("game->window.mlx is not initialized.\n");
-			return ;
-		}
-		if (game->window.win == NULL)
-		{
-			ft_printf("game->window.win is not initialized.\n");
-			return ;
-		}
 		if (coin->image == NULL)
 		{
 			ft_printf("coin->image is not initialized.\n");
@@ -210,6 +215,29 @@ void	draw_map(t_game *game)
 		mlx_put_image_to_window(game->window.mlx, game->window.win,
 			coin->image->drawable_img, coin->x * game->tile_size, coin->y
 			* game->tile_size);
+		tmp = tmp->next;
+	}
+	tmp = game->spikes;
+	while (tmp)
+	{
+		t_spikes *spikes = (t_spikes *)tmp->content;
+		if (spikes == NULL)
+		{
+			ft_printf("spikes is not initialized.\n");
+			return ;
+		}
+		if (spikes->state == 0)
+		{
+			mlx_put_image_to_window(game->window.mlx, game->window.win,
+				spikes->image_off->drawable_img, spikes->x * game->tile_size,
+				spikes->y * game->tile_size);
+		}
+		else
+		{
+			mlx_put_image_to_window(game->window.mlx, game->window.win,
+				spikes->image_on->drawable_img, spikes->x * game->tile_size,
+				spikes->y * game->tile_size);
+		}
 		tmp = tmp->next;
 	}
 }

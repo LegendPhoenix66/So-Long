@@ -65,8 +65,11 @@ void	close_game(t_game *game)
 	destroy_image(game, &game->player_img);
 	destroy_image(game, &game->exit_img);
 	destroy_image(game, &game->coin_img);
+	destroy_image(game, &game->spikes_on);
+	destroy_image(game, &game->spikes_off);
 	destroy_portal_images(game);
 	ft_lstclear(&game->coins, free);
+	ft_lstclear(&game->spikes, free);
 	close_map(game);
 	if (game->file)
 	{

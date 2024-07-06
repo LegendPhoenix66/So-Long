@@ -85,6 +85,7 @@ void	init(t_game *game, char *map_path)
 	game->tile_size = 32;
 	game->num_coins = 0;
 	game->coins = NULL;
+	game->spikes = NULL;
 	game->map = NULL;
 	game->map_height = 0;
 	game->map_width = 0;
@@ -94,6 +95,10 @@ void	init(t_game *game, char *map_path)
 	game->exit.x = -1;
 	game->exit.y = -1;
 	game->file = NULL;
+	game->spikes_on = load_image(game->window.mlx, "resources/spikes-on.xpm",
+			game->tile_size);
+	game->spikes_off = load_image(game->window.mlx, "resources/spikes-off.xpm",
+			game->tile_size);
 	game->coin_img = load_image(game->window.mlx, "resources/collectable.xpm",
 			game->tile_size);
 	game->background = load_image(game->window.mlx, "resources/grass.xpm",
@@ -136,6 +141,33 @@ int	animate(t_game *game)
 			+ (current_time.tv_nsec - last_time_portal.tv_nsec) / 1000000;
 		if (elapsed_portal >= 150)
 		{
+			t_spikes *spike;
+			t_list	*tmp;
+
+			tmp = game->spikes;
+			while (tmp)
+			{
+				spike = (t_spikes *)tmp->content;
+				if (spike->state == 6) {
+					spike->state = 0;
+					image = game->spikes_on.drawable_img;
+					// if player is on spikes
+					if (game->player.x == spike->x && game->player.y == spike->y)
+					{
+						ft_printf("You died!\n");
+						mlx_loop_end(game->window.mlx);
+					}
+				} else {
+					spike->state = spike->state + 1;
+					image = game->spikes_off.drawable_img;
+				}
+				if (spike->state == 0 || spike->state == 1)
+				{
+					mlx_put_image_to_window(game->window.mlx, game->window.win,
+											image, spike->x * game->tile_size, spike->y * game->tile_size);
+				}
+				tmp = tmp->next;
+			}
 			if (game->num_coins == 0)
 			{
 				image = game->portal_images->content;

@@ -50,6 +50,15 @@ typedef struct s_window
 	int			width;
 }				t_window;
 
+typedef struct s_spikes
+{
+	t_image		*image_on;
+	t_image		*image_off;
+	int			state;
+	int			x;
+	int			y;
+}				t_spikes;
+
 typedef struct s_game
 {
 	t_window	window;
@@ -62,6 +71,9 @@ typedef struct s_game
 	t_image		wall;
 	t_image		player_img;
 	t_image		exit_img;
+	t_list		*spikes;
+	t_image 	spikes_on;
+	t_image 	spikes_off;
 	char		**map;
 	int			map_width;
 	int			map_height;
