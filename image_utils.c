@@ -12,16 +12,36 @@
 
 #include "so_long.h"
 
-void	set_drawable_image(void *mlx_ptr, t_image *image, int new_width,
-		int new_height)
+void	copy_pixel_data(t_image *image, char *new_data, char *old_data,
+			t_pixel_data_params params)
 {
-	char	*old_data;
-	char	*new_data;
-	int		x;
-	int		y;
+	int	ratio_width;
+	int	ratio_height;
+	int	i;
 
-	old_data = mlx_get_data_addr(image->img, &image->bpp, &image->size_line,
-			&image->endian);
+	ratio_width = params.new_width * (image->bpp / 8);
+	ratio_height = image->height / params.new_width * (image->width
+			/ params.new_width) * (image->bpp / 8);
+	i = 0;
+	while (i < 4)
+	{
+		new_data[(params.y * ratio_width + params.x) * (image->bpp / 8) + i]
+			= old_data[(params.y * ratio_height) + i];
+		i++;
+	}
+}
+
+void	set_drawable_image(void *mlx_ptr, t_image *image, int new_width,
+			int new_height)
+{
+	char						*old_data;
+	char						*new_data;
+	int							x;
+	int							y;
+	struct s_pixel_data_params	params;
+
+	old_data = mlx_get_data_addr(image->img, &image->bpp,
+			&image->size_line, &image->endian);
 	image->drawable_img = mlx_new_image(mlx_ptr, new_width, new_height);
 	new_data = mlx_get_data_addr(image->drawable_img, &image->bpp,
 			&image->size_line, &image->endian);
@@ -31,18 +51,10 @@ void	set_drawable_image(void *mlx_ptr, t_image *image, int new_width,
 		x = 0;
 		while (x < new_width)
 		{
-			new_data[(y * new_width + x) * (image->bpp / 8)] = old_data[(y
-					* image->height / new_height * image->width + x
-					* image->width / new_width) * (image->bpp / 8)];
-			new_data[(y * new_width + x) * (image->bpp / 8) + 1] = old_data[(y
-					* image->height / new_height * image->width + x
-					* image->width / new_width) * (image->bpp / 8) + 1];
-			new_data[(y * new_width + x) * (image->bpp / 8) + 2] = old_data[(y
-					* image->height / new_height * image->width + x
-					* image->width / new_width) * (image->bpp / 8) + 2];
-			new_data[(y * new_width + x) * (image->bpp / 8) + 3] = old_data[(y
-					* image->height / new_height * image->width + x
-					* image->width / new_width) * (image->bpp / 8) + 3];
+			params.x = x;
+			params.y = y;
+			params.new_width = new_width;
+			copy_pixel_data(image, new_data, old_data, params);
 			x++;
 		}
 		y++;

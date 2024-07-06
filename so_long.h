@@ -35,6 +35,13 @@ typedef struct s_image
 	int			height;
 }				t_image;
 
+typedef struct s_pixel_data_params
+{
+	int	new_width;
+	int	x;
+	int	y;
+}			t_pixel_data_params;
+
 typedef struct s_object
 {
 	t_image		*image;
