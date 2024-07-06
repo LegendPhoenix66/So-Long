@@ -64,7 +64,7 @@ typedef struct s_game
 	t_window	window;
 	t_image		coin_img;
 	t_list		*coins;
-	int num_coins; // number of coins
+	int			num_coins; // number of coins
 	t_object	player;
 	t_object	exit;
 	t_image		background;
@@ -72,8 +72,8 @@ typedef struct s_game
 	t_image		player_img;
 	t_image		exit_img;
 	t_list		*spikes;
-	t_image 	spikes_on;
-	t_image 	spikes_off;
+	t_image		spikes_on;
+	t_image		spikes_off;
 	char		**map;
 	int			map_width;
 	int			map_height;
