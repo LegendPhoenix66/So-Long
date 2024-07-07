@@ -8,7 +8,7 @@ CFLAGS = -Wall -Wextra -Werror
 HEADER = so_long.h
 
 # Source files
-SRC = so_long.c check_args.c hook_handler.c image_utils.c close_helper.c map_utils.c player_movement.c update_images.c
+SRC = so_long.c check_args.c hook_handler.c image_utils.c close_helper.c map_utils.c player_movement.c update_images.c draw.c check_map.c validate_map.c can_reach.c handle_object.c
 
 # Name of the executable
 NAME = so_long

@@ -109,11 +109,27 @@ void			close_game(t_game *game);
 void			move_player(t_game *game, int direction);
 
 // map_utils.c
+void			error_and_exit(t_game *game, char *error_message);
 void			validate_and_calculate_map_size(t_game *game);
 void			fill_map(t_game *game);
-void			draw_map(t_game *game);
 void			check_map(t_game *game);
 int				can_reach(t_game *game, t_position start, t_position end,
 					char **map_copy);
+
+// draw.c
+void			draw_map(t_game *game);
+
+// validate_map.c
+void			check_walls(t_game *game);
+
+// can_reach.c
+int				can_reach_target(t_game *game, t_position start,
+					t_position target);
+
+//handle_objects.c
+void			handle_player(t_game *game, int x, int y);
+void			handle_exit(t_game *game, int x, int y);
+void			handle_coin(t_game *game, int x, int y);
+void			handle_spikes(t_game *game, int x, int y);
 
 #endif // SO_LONG_H
