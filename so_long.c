@@ -40,7 +40,7 @@ void	init_map(t_game *game)
 	int	temp_tile_width;
 	int	temp_tile_height;
 
-	calculate_map_size(game);
+	validate_and_calculate_map_size(game);
 	temp_tile_width = game->window.width / game->map_width;
 	temp_tile_height = game->window.height / game->map_height;
 	if (temp_tile_width < temp_tile_height)

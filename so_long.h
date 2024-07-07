@@ -35,6 +35,12 @@ typedef struct s_image
 	int			height;
 }				t_image;
 
+typedef struct s_position
+{
+	int	x;
+	int	y;
+}			t_position;
+
 typedef struct s_pixel_data_params
 {
 	int	new_width;
@@ -103,9 +109,11 @@ void			close_game(t_game *game);
 void			move_player(t_game *game, int direction);
 
 // map_utils.c
-void			calculate_map_size(t_game *game);
+void			validate_and_calculate_map_size(t_game *game);
 void			fill_map(t_game *game);
 void			draw_map(t_game *game);
 void			check_map(t_game *game);
+int				can_reach(t_game *game, t_position start, t_position end,
+					char **map_copy);
 
 #endif // SO_LONG_H
