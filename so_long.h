@@ -6,7 +6,7 @@
 /*   By: lhopp <lhopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 14:03:09 by lhopp             #+#    #+#             */
-/*   Updated: 2024/06/27 15:13:19 by lhopp            ###   ########.fr       */
+/*   Updated: 2024/07/08 12:15:19 by lhopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,16 +37,16 @@ typedef struct s_image
 
 typedef struct s_position
 {
-	int	x;
-	int	y;
-}			t_position;
+	int			x;
+	int			y;
+}				t_position;
 
 typedef struct s_pixel_data_params
 {
-	int	new_width;
-	int	x;
-	int	y;
-}			t_pixel_data_params;
+	int			new_width;
+	int			x;
+	int			y;
+}				t_pixel_data_params;
 
 typedef struct s_object
 {
@@ -77,7 +77,7 @@ typedef struct s_game
 	t_window	window;
 	t_image		coin_img;
 	t_list		*coins;
-	int			num_coins; // number of coins
+	int			num_coins;
 	t_object	player;
 	t_object	exit;
 	t_image		background;
@@ -126,10 +126,15 @@ void			check_walls(t_game *game);
 int				can_reach_target(t_game *game, t_position start,
 					t_position target);
 
-//handle_objects.c
+// handle_objects.c
 void			handle_player(t_game *game, int x, int y);
 void			handle_exit(t_game *game, int x, int y);
 void			handle_coin(t_game *game, int x, int y);
 void			handle_spikes(t_game *game, int x, int y);
+
+// check_interactions.c
+void			check_spikes_interaction(t_game *game, t_list **tmp, int old_x,
+					int old_y);
+void			check_coins_interaction(t_game *game, t_list **tmp);
 
 #endif // SO_LONG_H
