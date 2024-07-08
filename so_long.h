@@ -6,7 +6,7 @@
 /*   By: lhopp <lhopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 14:03:09 by lhopp             #+#    #+#             */
-/*   Updated: 2024/07/08 12:15:19 by lhopp            ###   ########.fr       */
+/*   Updated: 2024/07/08 12:23:06 by lhopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,5 +136,12 @@ void			handle_spikes(t_game *game, int x, int y);
 void			check_spikes_interaction(t_game *game, t_list **tmp, int old_x,
 					int old_y);
 void			check_coins_interaction(t_game *game, t_list **tmp);
+
+// animate.c
+int				animate(t_game *game);
+
+// load_images.c
+void			load_and_check_images(t_game *game);
+void			init_portal_images(t_game *game);
 
 #endif // SO_LONG_H
